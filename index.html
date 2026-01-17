@@ -2,6 +2,72 @@
 <html>
   <head>
     <link rel="stylesheet" href="style.css">
+    <style>
+      body{
+  position:relative;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+h1{
+  color: white;
+  font-family: 'Codystar' , 'sans-serif';
+  font-size: 50px;
+  letter-spacing: 3px;
+  text-align: center;
+}
+
+.snowfall{
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: linear-gradient(#1090d0, #2612aa 85%);
+}
+
+.snowflake{
+  --small : 3px;
+  --medium: 7px;
+
+  width: var(--small);
+  height: var(--small);
+
+  position: absolute;
+  top: -10%;
+  left: 10%;
+  background-color: white;
+  border-radius: 50%;
+
+  animation: snow 6s linear infinite, 
+  wind 6s ease-in-out infinite;
+}
+
+
+@keyframes snow{
+  0%   { top: -20px; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { top: 100%; opacity: 50%; }
+}
+
+@keyframes wind{
+  100% {transform: translateX(60px);}
+}
+
+.snow-ground {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background: white;
+  border-radius: 50% 50% 0 0;
+  opacity: 0.9;
+  transition: height 0.5s ease-out;
+}
+    </style>
   </head>
   <body>
     <h1>Happy Holidays</h1>
@@ -10,8 +76,49 @@
     <div class="snow-ground"></div>
     </div>
 
-    <script src="script.js">
-      
+    <script>
+      const snowFlakesCount =70;
+const snowfall = document.querySelector('.snowfall');
+
+for(let i = 0; i<snowFlakesCount; i++){
+  const flake = document.createElement('div');
+  flake.classList.add('snowflake');
+  snowfall.appendChild(flake);
+}
+
+const snowflakes = document.querySelectorAll('.snowflake')
+
+snowflakes.forEach((flake) => {
+
+  const depth = Math.random();
+
+  const size = 2 + depth * 4;
+  const duration = 10 - depth * 6; // near = faster
+  const opacity = 0.3 + depth * 0.7;
+
+  const setLeft = -50 + (Math.random()*200);
+  const setDelay = (Math.random()*6).toFixed(1);
+  const startTop = -10 - Math.random() * 100;
+
+  flake.style.left = `${setLeft}%`;
+  flake.style.top = `${startTop}%`;
+  flake.style.width = `${size}px`;
+  flake.style.height = `${size}px`;
+  flake.style.opacity = opacity;
+  flake.style.animationDelay= `${setDelay}s`;
+});
+
+const snowGround = document.querySelector('.snow-ground');
+
+let snowHeight = 0;
+const MAX_SNOW_HEIGHT = 80; // px
+
+setInterval(() => {
+  if (snowHeight < MAX_SNOW_HEIGHT) {
+    snowHeight += Math.random() * 1.2; // slow, organic growth
+    snowGround.style.height = `${snowHeight}px`;
+  }
+}, 1200);
     </script>
   </body>
 </html>
